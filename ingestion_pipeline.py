@@ -7,6 +7,8 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 load_dotenv()
 
+
+#document loader //
 def load_documents(docs_path = 'docs') :
 
     if not os.path.exists(docs_path) :
@@ -31,10 +33,35 @@ def load_documents(docs_path = 'docs') :
         print(f'content preview :{doc.page_content[:100]}')
         print(f"source : {doc.metadata['source']}")
 
+    return documents
+
+#document chunking //
+def split_document(documents,chunk_size = 800,chunk_overlap=0) :
+
+    print("CHUNKING DOCUMENT")
+
+    text_splitter = CharacterTextSplitter(
+        chunk_size= chunk_size,
+        chunk_overlap =chunk_overlap  
+    )
+
+    chunks  =  text_splitter.split_documents(documents)
+
+    if chunks :
+        for i,chunk in enumerate(chunks[:5]) :
+            print(f"\n--- Chunk {i+1} ---")
+            print(f"Source: {chunk.metadata['source']}")
+            print(f"Length: {len(chunk.page_content)} characters")
+            print(f"Content:")
+            print(chunk.page_content)
+            print("-" * 50)
+
+    
 
 def main() :
     print("Main Function")
-    load_documents()
+    documents = load_documents()
+    split_document(documents)
 
 if __name__ == "__main__" :
     main()
