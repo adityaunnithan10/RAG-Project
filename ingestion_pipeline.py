@@ -3,8 +3,7 @@ from langchain_community.document_loaders import TextLoader,DirectoryLoader
 from langchain_text_splitters import CharacterTextSplitter 
 from langchain_chroma import Chroma
 from dotenv import load_dotenv
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-
+from langchain_openai import OpenAIEmbeddings
 load_dotenv()
 
 
@@ -67,7 +66,7 @@ def split_document(documents,chunk_size = 800,chunk_overlap=0) :
 def create_vectror_store(chunks,persist_directory="db/chroma_db"):
     print("Creating vector embedding and chroma db")
 
-    embedding_model =  GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
+    embedding_model =  OpenAIEmbeddings(model="text-embedding-3-small")
 
     vectorstore = Chroma.from_documents(
         documents=chunks,
